@@ -2,42 +2,56 @@
 
 from numpy import *
 
+
+# page 67
 def loadDataSet():
-    postingList=[['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
-            ['maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'],
-            ['my', 'dalmation', 'is', 'so', 'cute', 'I', 'love', 'him'],
-            ['stop', 'posting', 'stupid', 'worthless', 'garbage'],
-            ['mr', 'licks', 'ate', 'my', 'steak', 'how', 'to', 'stop', 'him'],
-            ['quit', 'buying', 'worthless', 'dog', 'food', 'stupid']]
+    postingList = [
+        ['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
+        ['maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'],
+        ['my', 'dalmation', 'is', 'so', 'cute', 'I', 'love', 'him'],
+        ['stop', 'posting', 'stupid', 'worthless', 'garbage'],
+        ['mr', 'licks', 'ate', 'my', 'steak', 'how', 'to', 'stop', 'him'],
+        ['quit', 'buying', 'worthless', 'dog', 'food', 'stupid']
+    ]
+
     # labels: 0 not abusive, 1 abusive
-    classVec = [0,1,0,1,0,1]
+    classVec = [0, 1, 0, 1, 0, 1]
     return postingList, classVec
 
+
+# page 67
 def createVocabList(dataSet):
     vocabSet = set([])
     for document in dataSet:
         vocabSet = vocabSet | set(document)
     return list(vocabSet)
 
+
+# pages 67, 68
 def setOfWords2Vec(vocabList, inputSet):
-    returnVec = [0]*len(vocabList)
+    returnVec = [0] * len(vocabList)
     for word in inputSet:
         if word in vocabList:
             returnVec[vocabList.index(word)] = 1
-        else: print "the word: %s is not in my vocabulary!" % word
+        else:
+            print "the word: %s is not in my vocabulary!" % word
     return returnVec
 
+
+# page 69
 def trainNBO(trainMatrix, trainCategory):
-    #print "trainMatrix: ", trainMatrix
+    # print "trainMatrix: ", trainMatrix
     print "sum(trainMatrix): ", sum(trainMatrix)
     numTrainDocs = len(trainMatrix)
-    numWords     = len(trainMatrix[0])
+    numWords = len(trainMatrix[0])
     print "trainCategory: ", trainCategory
     print "sum(trainCategory): ", sum(trainCategory)
-    pAbusive = sum(trainCategory)/float(numTrainDocs)
-    p0Num = ones(numWords); p1Num = ones(numWords)
+    pAbusive = sum(trainCategory) / float(numTrainDocs)
+    p0Num = ones(numWords)
+    p1Num = ones(numWords)
     print "p0Num: ", p0Num
-    p0Denom = 2.0; p1Denom = 2.0
+    p0Denom = 2.0
+    p1Denom = 2.0
     print "range(numTrainDocs: ", range(numTrainDocs), "\n"
     for i in range(numTrainDocs):
         if trainCategory[i] == 1:
@@ -46,18 +60,20 @@ def trainNBO(trainMatrix, trainCategory):
         else:
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix)
-    p1Vect = log(p1Num/p1Denom)
-    p0Vect = log(p0Num/p0Denom)
+    p1Vect = log(p1Num / p1Denom)
+    p0Vect = log(p0Num / p0Denom)
     return p0Vect, p1Vect, pAbusive
+
 
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
     p1 = sum(vec2Classify * p1Vec) + log(pClass1)
-    #print "p1: ", p1, "\n"
+    # print "p1: ", p1, "\n"
     p0 = sum(vec2Classify * p0Vec) + log(1.0 - pClass1)
     if p1 > p0:
         return 1
     else:
         return 0
+
 
 def testingNB():
     listOPosts, listClasses = loadDataSet()
@@ -71,8 +87,17 @@ def testingNB():
     print "pAb: ", pAb, "\n"
     testEntry = ['love', 'my', 'dalmation']
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
-    print testEntry,'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
+    print testEntry, 'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
     testEntry = ['stupid', 'garbage']
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
-    print testEntry,'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
+    print testEntry, 'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
 
+
+# listOPosts, listClasses = bayes.loadDataSet()
+# myVocabList = bayes.createVocabList(listOPosts)
+# myVocabList
+# bayes.setOfWords2Vec(myVocabList, listOPosts[0])
+# trainMat = []
+# for postinDoc in listOPosts:
+#     trainMat.append(bayes.setOfWords2Vec(myVocabList, postinDoc))
+# p0V,P1V,PAb=bayes.trainNBO(trainMat, listClasses)
