@@ -2,6 +2,7 @@
 
 require 'set'
 require 'rspec'
+require 'nmatrix'
 
 class Array
   def multiply_by_element(a2)
@@ -14,7 +15,6 @@ class Array
 end
 
 class NBClassifier
-
   def load_data_set
       postingList=[['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
               ['maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'],
@@ -27,7 +27,7 @@ class NBClassifier
       return postingList, classVec
   end
 
-
+  # Copied to lib/nb_classifier.rb
   # A vocabulary is an array of unique words
   def create_vocabulary(dataSet)
     vocabSet = Set.new
@@ -40,7 +40,6 @@ class NBClassifier
 
 
   def setOfWords2Vec(vocabList, inputSet)
-
     returnVec = [0]*vocabList.size
     inputSet.each do |word|
       if vocabList.include?(word) #word in vocabList
