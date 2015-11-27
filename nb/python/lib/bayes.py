@@ -1,8 +1,10 @@
-#!/usr/bin/env python
-
 from numpy import *
-import unittest
 
+# For future blog post with mathjax:
+# Bayes Theorem:
+# $$
+# P(A|B)= \frac{P(B|A)P(A)}{P(B)}.
+# $$
 
 # page 67
 def loadDataSet():
@@ -55,10 +57,13 @@ def trainNBO(trainMatrix, trainCategory):
     numTrainDocs = len(trainMatrix)
     numWords = len(trainMatrix[0]) # numWords is number of features?
     pAbusive = sum(trainCategory) / float(numTrainDocs)
-    p0Num = zeros(numWords) # => array([0., ..., 1.])
-    p1Num = zeros(numWords)
-    p0Denom = 0.0
-    p1Denom = 0.0
+    # These are array types, which is important below, as we want to
+    # perform vector arithmetic on them, specifically dividing them
+    # element wise with a scalar.
+    # p0Num = zeros(numWords) # => array([0., ..., 0.])
+    # p0Num = zeros(numWords); p1Num = zeros(numWords); p0Denom = 0.0; p1Denom = 0.0
+    p0Num = ones(numWords); p1Num = ones(numWords); p0Denom = 2.0; p1Denom = 2.0
+
     for i in range(numTrainDocs): # [0, 1, 2, ..., numTrainingDocs]
         if trainCategory[i] == 1:
             p1Num += trainMatrix[i]
@@ -66,14 +71,18 @@ def trainNBO(trainMatrix, trainCategory):
         else:
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
-    print "p0Denom: ", p0Denom
-    print "p1Denom: ", p1Denom
-    p1Vect = p1Num / p1Denom
-    p0Vect = p0Num / p0Denom
+    # print "p0Denom: ", p0Denom
+    # print "p1Denom: ", p1Denom
+    # print "p1Num: ", p1Num
+    # print "p0Num: ", p0Num
+    p1Vect = log(p1Num / p1Denom)
+    p0Vect = log(p0Num / p0Denom)
     return p0Vect, p1Vect, pAbusive
 
 
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
+    # p1 = sum(vec2Classify * p1Vec) + pClass1
+    # p0 = sum(vec2Classify * p0Vec) + (1.0 - pClass1)
     p1 = sum(vec2Classify * p1Vec) + log(pClass1)
     p0 = sum(vec2Classify * p0Vec) + log(1.0 - pClass1)
     if p1 > p0:
@@ -90,9 +99,10 @@ def testingNB():
     for postinDoc in listOPosts:
         trainMat.append(setOfWords2Vec(myVocabList, postinDoc))
     p0V, p1V, pAb = trainNBO(trainMat, listClasses)
-    # print "p0V: ", p0V, "\n"
-    # print "p1V: ", p1V, "\n"
-    # print "pAb: ", pAb, "\n"
+    print "p0V: ", p0V, "\n"
+    print "p1V: ", p1V, "\n"
+    print "pAb: ", pAb, "\n"
+
     testEntry = ['love', 'my', 'dalmation']
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
     print testEntry, 'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
@@ -100,49 +110,4 @@ def testingNB():
     thisDoc = array(setOfWords2Vec(myVocabList, testEntry))
     print testEntry, 'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
 
-testingNB()
-
-class TestNB(unittest.TestCase):
-    def test_setOfWords2Vec(self):
-        # listOPosts is actually...
-        # listClasses is actually a list of labels for the data in listOPosts
-        listOPosts, listClasses = loadDataSet()
-        myVocabList = createVocabList(listOPosts)
-        features = setOfWords2Vec(myVocabList, listOPosts[0])
-        expected = [
-            0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1
-        ]
-        self.assertEqual(features, expected)
-
-    def test_createVocabList(self):
-        dataSet = [
-            ['stupid', 'garbage'],
-            ['love', 'puppies']
-        ]
-        expected = ['stupid', 'garbage', 'love', 'puppies']
-        word_list = createVocabList(dataSet)
-        self.assertTrue(set(word_list) == set(expected))
-        # don't want duplicate elements
-        self.assertTrue(len(word_list) == len(expected))
-
-    def test_trainNBO(self):
-        listOPosts, listClasses = loadDataSet()
-        myVocabList = createVocabList(listOPosts)
-        trainMat = [] # list of lists, e.g., [[...], ..., [...]]
-        for postinDoc in listOPosts:
-            trainMat.append(setOfWords2Vec(myVocabList, postinDoc))
-        # this is interesting as the names sent to the funtion imply
-        # different types than the names received by the function.
-        # Compare sending trainCategory to receiving listClasses.
-        # There isn't even a hint of meaning between those two names
-        # at the program (self-referentiall) perspective.
-        # p0Vect, p1Vect, pAbusive = trainNBO(trainMatrix, trainCategory)
-        p0V, p1V, pAb = trainNBO(trainMat, listClasses)
-        # print p0V, p1V, pAb
-        self.assertTrue(False)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
+# testingNB()
