@@ -1,0 +1,37 @@
+A new version of Multitenancy with Rails - 2nd edition is available!
+Here are the download links for the latest version:
+Fa-laptop
+PDF
+(for Mac or PC)
+Fa-mobile
+EPUB
+(for iPad, etc)
+Fa-tablet
+MOBI
+(for Kindle)
+Release Notes
+Hello readers,
+
+I've been working hard on Chapter 5, the Braintree subscriptions chapter since I last sent out a release. It's getting very close to done, with just the plan restrictions + webhooks sections to complete. I'm very happy about this because I've been working on this one chapter since September and now it's 90% done. I'm looking forward to working on the Stripe chapter after this and getting a much clearer idea for myself how the two compare.
+
+I've updated some of the earlier chapters based on feedback from you. Thanks to those who have provided that.
+
+I'm also going to be having another "sale" soon because it's December and everything's on sale in December. It's also my birthday month: I was born on the 4th of December. I'm releasing this coupon code early because I'm excited about Chapter 5 and some good solid progress.
+
+Here's the coupon code to get the book for $10: <redacted>
+
+If you know of anyone who'd like the book for $10, give them that URL.
+
+Thanks for reading! I really appreciate it.
+
+
+
+Currently we'll email you whenever the author publishes a new version of this book. To change this, please visit your account page:
+http://leanpub.com/user_dashboard/email
+You can also download the latest version of this book (and all your Leanpub purchases) from this page.
+We can also email this version to your Kindle at <redacted>. To do this, sign in and click the button on your dashboard.
+If you have any problems with your purchase or any questions about Leanpub, please email hello@leanpub.com.
+Thanks,
+Leanpub
+unsubscribe
+P.S. You should sign up for this book's mailing list!
