@@ -48,6 +48,12 @@ class TestNB(unittest.TestCase):
         self.assertAlmostEqual(pAb, 0.5)
         # self.assertTrue(False)
 
+    def test_textParse(self):
+        bigString = "Big String.html.md - 733T"
+        expected = ["big", "string", "html", "733t"]
+        actual = bayes.textParse(bigString)
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
