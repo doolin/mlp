@@ -20,6 +20,19 @@ class TestNB(unittest.TestCase):
         ]
         self.assertEqual(features, expected)
 
+    # identical output to setOfWords
+    # todo: find a way to test difference.
+    def test_bagOfWords2VecMN(self):
+        listOPosts, listClasses = bayes.loadDataSet()
+        myVocabList = bayes.createVocabList(listOPosts)
+        features = bayes.bagOfWords2VecMN(myVocabList, listOPosts[0])
+        expected = [
+            0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+            0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1
+        ]
+        self.assertEqual(features, expected)
+
+
     def test_createVocabList(self):
         dataSet = [
             ['stupid', 'garbage'],
