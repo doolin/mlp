@@ -7,3 +7,4 @@ import bayes
 # bayes.testingNB()
 if __name__ == "__main__":
     bayes.testingNB()
+    bayes.spamTest()

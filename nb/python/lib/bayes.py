@@ -124,18 +124,22 @@ def textParse(bigString):
 
 def spamTest():
     docList = []; classList = []; fullText = []
-    for i in range(1, 26):
-        wordList = textParse(open('email/spam/%d.txt' % i).read())
+    # for i in range(1, 26):
+    for i in range(1, 5):
+        wordList = textParse(open('lib/spam/%d.txt' % i).read())
         docList.append(wordList)
         fullText.extend(wordList)
         classList.append(1)
-        wordList = textParse(open('email/ham/%d.txt' % i).read())
+        wordList = textParse(open('lib/ham/%d.txt' % i).read())
         docList.append(wordList)
         fullText.extend(wordList)
         classList.append(0)
     vocabList = createVocabList(docList)
-    trainingSet = range(50); testSet = []
-    for i in range(10):
+    # trainingSet = range(50); testSet = []
+    # trainingSet = range(10); testSet = []
+    trainingSet = range(5); testSet = []
+    # for i in range(10):
+    for i in range(3):
         randIndex = int(random.uniform(0, len(trainingSet)))
         testSet.append(trainingSet[randIndex])
         del(trainingSet[randIndex])
