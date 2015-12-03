@@ -155,3 +155,34 @@ def spamTest():
             errorCount += 1
     print "the error rate is: ", float(errorCount)/len(testSet)
 
+def calcMostFreq(vocabList, fullText):
+    import operator
+    freqDict = {}
+    for token in vocabList:
+        freqDict[token] = fullText.count(token)
+    sortedFreq = sorted(freqDict.iteritems(), key = operator.itemgetter(1), reverse = True)
+    return sortedFreq[:30]
+
+def localWords(feed1, feed0):
+    import feedparser
+    docList = []; classList = []; fullText = []
+    minLen = min(len(feed['entries']), len(feed0['entries']))
+    for i in range(minlen):
+        wordList = textParse(feed1['entries'][i]['summary'])
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(1)
+        wordList = textParse(feed0['entries'][i]['summary'])
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(0)
+    vocabList = createVocabList(docList)
+    top30Words = calcMostFreq(vocabList, fullText)
+    for pairW in top30Words:
+        if pairW[0] in vocabList: vocabList.remove(pairW[0])
+    trainingSet = range(2*minLen); testSet = []
+    for i in range(20):
+        randIndex = int(random.uniform(0, len(trainingSet)))
+        testSet.append(trainingSet[randIndex])
+        del(trainingSet[randIndex])
+    trainMat = []; trainClasses = []
