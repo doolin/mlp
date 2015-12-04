@@ -186,3 +186,17 @@ def localWords(feed1, feed0):
         testSet.append(trainingSet[randIndex])
         del(trainingSet[randIndex])
     trainMat = []; trainClasses = []
+    for docIndex in trainingSet:
+        trainMat.append(bagOfWords2VecMN(vocabList, docList[docIndex]))
+        trainClasses.append(classList[docIndex])
+    p0V, p1V, pSpam = trainNB0(array(trainMat), array(trainClasses))
+    errorCount = 0
+    for docIndex in testSet:
+        wordVector = bagOfWords2VecMN(vocabList, docList[docIndex])
+        if classifyNB(array(wordVector), p0V, p1V, pSpam) != \
+                classList[docIndex]:
+                    errorCount += 1
+    print 'the error rate is: ', float(errorCount)/len(testSet)
+    return vocabList, p0V, p1V
+
+
