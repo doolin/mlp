@@ -198,5 +198,3 @@ def localWords(feed1, feed0):
                     errorCount += 1
     print 'the error rate is: ', float(errorCount)/len(testSet)
     return vocabList, p0V, p1V
-
-
