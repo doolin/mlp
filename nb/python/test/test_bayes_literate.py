@@ -3,14 +3,14 @@
 import unittest
 import sys
 sys.path.append('../lib')
-import bayes
+import bayes_literate as bayes
 
 class TestNB(unittest.TestCase):
     def test_setOfWords2Vec(self):
         # listOPosts is actually...
         # listClasses is actually a list of labels for the data in listOPosts
-        listOPosts, listClasses = bayes.loadDataSet()
-        myVocabList = bayes.createVocabList(listOPosts)
+        listOPosts, listClasses = bayes.load_data_set()
+        myVocabList = bayes.create_vocabulary(listOPosts)
         features = bayes.setOfWords2Vec(myVocabList, listOPosts[0])
         expected = [
             0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
@@ -21,8 +21,8 @@ class TestNB(unittest.TestCase):
     # identical output to setOfWords
     # todo: find a way to test difference.
     def test_bagOfWords2VecMN(self):
-        listOPosts, listClasses = bayes.loadDataSet()
-        myVocabList = bayes.createVocabList(listOPosts)
+        listOPosts, listClasses = bayes.load_data_set()
+        myVocabList = bayes.create_vocabulary(listOPosts)
         features = bayes.bagOfWords2VecMN(myVocabList, listOPosts[0])
         expected = [
             0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
@@ -37,14 +37,14 @@ class TestNB(unittest.TestCase):
             ['love', 'puppies']
         ]
         expected = ['stupid', 'garbage', 'love', 'puppies']
-        word_list = bayes.createVocabList(dataSet)
+        word_list = bayes.create_vocabulary(dataSet)
         self.assertTrue(set(word_list) == set(expected))
         # don't want duplicate elements
         self.assertTrue(len(word_list) == len(expected))
 
     def test_trainNBO(self):
-        listOPosts, listClasses = bayes.loadDataSet()
-        myVocabList = bayes.createVocabList(listOPosts)
+        listOPosts, listClasses = bayes.load_data_set()
+        myVocabList = bayes.create_vocabulary(listOPosts)
         trainMat = [] # list of lists, e.g., [[...], ..., [...]]
         for postinDoc in listOPosts:
             trainMat.append(bayes.setOfWords2Vec(myVocabList, postinDoc))
