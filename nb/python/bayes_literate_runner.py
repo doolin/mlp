@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append('./lib')
-import bayes as bayes
+import bayes_literate as bayes
 
 # bayes.testingNB()
 if __name__ == "__main__":

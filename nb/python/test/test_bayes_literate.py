@@ -9,9 +9,9 @@ class TestNB(unittest.TestCase):
     def test_setOfWords2Vec(self):
         # listOPosts is actually...
         # listClasses is actually a list of labels for the data in listOPosts
-        listOPosts, listClasses = bayes.load_data_set()
-        myVocabList = bayes.create_vocabulary(listOPosts)
-        features = bayes.setOfWords2Vec(myVocabList, listOPosts[0])
+        documents, labels = bayes.load_documents()
+        vocabulary = bayes.create_vocabulary(documents)
+        features = bayes.setOfWords2Vec(vocabulary, documents[0])
         expected = [
             0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
             0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1
@@ -21,7 +21,7 @@ class TestNB(unittest.TestCase):
     # identical output to setOfWords
     # todo: find a way to test difference.
     def test_bagOfWords2VecMN(self):
-        listOPosts, listClasses = bayes.load_data_set()
+        listOPosts, listClasses = bayes.load_documents()
         myVocabList = bayes.create_vocabulary(listOPosts)
         features = bayes.bagOfWords2VecMN(myVocabList, listOPosts[0])
         expected = [
@@ -43,7 +43,7 @@ class TestNB(unittest.TestCase):
         self.assertTrue(len(word_list) == len(expected))
 
     def test_trainNBO(self):
-        listOPosts, listClasses = bayes.load_data_set()
+        listOPosts, listClasses = bayes.load_documents()
         myVocabList = bayes.create_vocabulary(listOPosts)
         trainMat = [] # list of lists, e.g., [[...], ..., [...]]
         for postinDoc in listOPosts:
