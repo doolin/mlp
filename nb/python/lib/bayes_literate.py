@@ -1,9 +1,20 @@
-'''docstring'''
-
 #!/usr/bin/env python
 
-from numpy import * # pylint: disable=unused-wildcard-import, redefined-builtin
+'''
+docstring
+'''
 
+from numpy import * # pylint: disable=unused-wildcard-import, redefined-builtin, wildcard-import
+
+'''
+This example uses 0 and 1 for two different purposes.
+
+1. Classifying a document as either good (0), or bad (1).
+2. Indicating absence (0) or presence (1) of a feature (word)
+   in a document.
+
+This is somewhat confusing.
+'''
 
 def load_documents():
     '''hard-coded documents, should be in a test file, not in this file.'''
@@ -14,8 +25,8 @@ def load_documents():
         ['stop', 'posting', 'stupid', 'worthless', 'garbage'],
         ['mr', 'licks', 'ate', 'my', 'steak', 'how', 'to', 'stop', 'him'],
         ['quit', 'buying', 'worthless', 'dog', 'food', 'stupid']]
-    labels = [0, 1, 0, 1, 0, 1]  # labels: 0 not abusive, 1 abusive
-    return documents, labels
+    classifications = [0, 1, 0, 1, 0, 1]  # 0 not abusive, 1 abusive
+    return documents, classifications
 
 
 def create_vocabulary(documents):
@@ -27,23 +38,30 @@ def create_vocabulary(documents):
 
 
 def set_of_words_2_vec(vocabulary, document):
-    ''' I think this is a feature '''
-    return_vec = [0] * len(vocabulary)
+    '''
+    vocabulary is the set of words, which are the features in this
+    example. document is the list of words within in a document.
+
+    What we do here is apply the labels 0 or 1 to a feature set
+    corresponding to vocabulary word's absence or presence in the
+    document.
+    '''
+    feature_labels = [0] * len(vocabulary)
     for word in document:
         if word in vocabulary:
-            return_vec[vocabulary.index(word)] = 1
+            feature_labels[vocabulary.index(word)] = 1
         else:
             print "the word: %s is not in my vocabulary!" % word
-    return return_vec
+    return feature_labels
 
 
 def bag_of_words_2_vec_mn(vocab_list, input_set):
     ''' feature? '''
-    return_vec = [0] * len(vocab_list)
+    feature_labels = [0] * len(vocab_list)
     for word in input_set:
         if word in vocab_list:
-            return_vec[vocab_list.index(word)] += 1
-    return return_vec
+            feature_labels[vocab_list.index(word)] += 1
+    return feature_labels
 
 
 def train_nbo(train_matrix, train_category):
@@ -67,8 +85,8 @@ def train_nbo(train_matrix, train_category):
         else:
             p0_num += train_matrix[i]
             p0_denom += sum(train_matrix)
-    p1_vect = log(p1_num / p1_denom)
-    p0_vect = log(p0_num / p0_denom)
+    p1_vect = log(p1_num / p1_denom) # pylint: disable=undefined-variable
+    p0_vect = log(p0_num / p0_denom) # pylint: disable=undefined-variable
     print "p1_vec: ", p1_vect, "\n"
     print "p0_vec: ", p0_vect, "\n"
     return p0_vect, p1_vect, p_abusive
@@ -76,8 +94,8 @@ def train_nbo(train_matrix, train_category):
 
 def classify_nb(test_vector, p0_vec, p1_vec, p_class1):
     ''' docstring'''
-    p_spam = sum(test_vector * p1_vec) + log(p_class1)
-    p_notspam = sum(test_vector * p0_vec) + log(1.0 - p_class1)
+    p_spam = sum(test_vector * p1_vec) + log(p_class1) # pylint: disable=undefined-variable
+    p_notspam = sum(test_vector * p0_vec) + log(1.0 - p_class1) # pylint: disable=undefined-variable
     if p_spam > p_notspam:
         return 1
     else:
@@ -86,12 +104,12 @@ def classify_nb(test_vector, p0_vec, p1_vec, p_class1):
 
 def testing_nb():
     ''' docstring '''
-    documents, labels = load_documents()
+    documents, classifications = load_documents()
     vocabulary = create_vocabulary(documents)
     train_mat = []
     for document in documents:
         train_mat.append(set_of_words_2_vec(vocabulary, document))
-    p0_vector, p1_vector, p_abusive = train_nbo(train_mat, labels)
+    p0_vector, p1_vector, p_abusive = train_nbo(train_mat, classifications)
     print "p0_vector: ", p0_vector, "\n"
     print "p1_vector: ", p1_vector, "\n"
     print "pAb: ", p_abusive, "\n"

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# pylint: disable=missing-docstring
+
 import unittest
 import sys
 sys.path.append('../lib')
@@ -21,9 +23,9 @@ class TestNB(unittest.TestCase):
     # identical output to setOfWords
     # todo: find a way to test difference.
     def test_bag_of_words_2_vec_mn(self):
-        listOPosts, listClasses = bayes.load_documents()
-        myVocabList = bayes.create_vocabulary(listOPosts)
-        features = bayes.bag_of_words_2_vec_mn(myVocabList, listOPosts[0])
+        documents, classifications = bayes.load_documents() # pylint: disable=unused-variable
+        vocabulary = bayes.create_vocabulary(documents)
+        features = bayes.bag_of_words_2_vec_mn(vocabulary, documents[0])
         expected = [
             0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
             0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1
@@ -31,18 +33,18 @@ class TestNB(unittest.TestCase):
         self.assertEqual(features, expected)
 
 
-    def test_createVocabList(self):
-        dataSet = [
+    def test_create_vocabulary(self):
+        documents = [
             ['stupid', 'garbage'],
             ['love', 'puppies']
         ]
         expected = ['stupid', 'garbage', 'love', 'puppies']
-        word_list = bayes.create_vocabulary(dataSet)
+        word_list = bayes.create_vocabulary(documents)
         self.assertTrue(set(word_list) == set(expected))
         # don't want duplicate elements
         self.assertTrue(len(word_list) == len(expected))
 
-    def test_trainNBO(self):
+    def test_train_nbo(self):
         listOPosts, listClasses = bayes.load_documents()
         myVocabList = bayes.create_vocabulary(listOPosts)
         trainMat = [] # list of lists, e.g., [[...], ..., [...]]
@@ -60,9 +62,9 @@ class TestNB(unittest.TestCase):
         # self.assertTrue(False)
 
     def test_text_parse(self):
-        bigString = "Big String.html.md - 733T"
+        big_string = "Big String.html.md - 733T"
         expected = ["big", "string", "html", "733t"]
-        actual = bayes.text_parse(bigString)
+        actual = bayes.text_parse(big_string)
         self.assertEqual(expected, actual)
 
 
