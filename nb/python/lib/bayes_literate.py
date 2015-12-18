@@ -1,9 +1,12 @@
+'''docstring'''
+
 #!/usr/bin/env python
 
-from numpy import *
+from numpy import * # pylint: disable=unused-wildcard-import, redefined-builtin
 
 
 def load_documents():
+    '''hard-coded documents, should be in a test file, not in this file.'''
     documents = [
         ['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
         ['maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'],
@@ -15,186 +18,190 @@ def load_documents():
     return documents, labels
 
 
-def create_vocabulary(dataSet):
-    vocabSet = set([])
-    for document in dataSet:
-        vocabSet = vocabSet | set(document)
-    return list(vocabSet)
+def create_vocabulary(documents):
+    '''creates vocabulary'''
+    vocabulary = set([])
+    for document in documents:
+        vocabulary = vocabulary | set(document)
+    return list(vocabulary)
 
 
-def setOfWords2Vec(vocabulary, document):
-    returnVec = [0] * len(vocabulary)
+def set_of_words_2_vec(vocabulary, document):
+    ''' I think this is a feature '''
+    return_vec = [0] * len(vocabulary)
     for word in document:
         if word in vocabulary:
-            returnVec[vocabulary.index(word)] = 1
+            return_vec[vocabulary.index(word)] = 1
         else:
             print "the word: %s is not in my vocabulary!" % word
-    return returnVec
+    return return_vec
 
 
-def bagOfWords2VecMN(vocabList, inputSet):
-    returnVec = [0] * len(vocabList)
-    for word in inputSet:
-        if word in vocabList:
-            returnVec[vocabList.index(word)] += 1
-    return returnVec
+def bag_of_words_2_vec_mn(vocab_list, input_set):
+    ''' feature? '''
+    return_vec = [0] * len(vocab_list)
+    for word in input_set:
+        if word in vocab_list:
+            return_vec[vocab_list.index(word)] += 1
+    return return_vec
 
 
-def trainNBO(trainMatrix, trainCategory):
-    print "sum(trainMatrix): ", sum(trainMatrix)
-    numTrainDocs = len(trainMatrix)
-    numWords = len(trainMatrix[0])
-    print "trainCategory: ", trainCategory
-    print "sum(trainCategory): ", sum(trainCategory)
-    pAbusive = sum(trainCategory) / float(numTrainDocs)
-    p0Num = ones(numWords)
-    p1Num = ones(numWords)
-    print "p0Num: ", p0Num
-    p0Denom = 2.0
-    p1Denom = 2.0
-    print "range(numTrainDocs: ", range(numTrainDocs), "\n"
-    for i in range(numTrainDocs):
-        if trainCategory[i] == 1:
-            p1Num += trainMatrix[i]
-            p1Denom += sum(trainMatrix)
+def train_nbo(train_matrix, train_category):
+    ''' docstring '''
+    print "sum(train_matrix): ", sum(train_matrix)
+    num_train_docs = len(train_matrix)
+    num_words = len(train_matrix[0])
+    print "train_category: ", train_category
+    print "sum(train_category): ", sum(train_category)
+    p_abusive = sum(train_category) / float(num_train_docs)
+    p0_num = ones(num_words)
+    p1_num = ones(num_words)
+    print "p0_num: ", p0_num
+    p0_denom = 2.0
+    p1_denom = 2.0
+    print "range(num_train_docs: ", range(num_train_docs), "\n"
+    for i in range(num_train_docs):
+        if train_category[i] == 1:
+            p1_num += train_matrix[i]
+            p1_denom += sum(train_matrix)
         else:
-            p0Num += trainMatrix[i]
-            p0Denom += sum(trainMatrix)
-    p1Vect = log(p1Num / p1Denom)
-    p0Vect = log(p0Num / p0Denom)
-    print "p1Vec: ", p1Vect, "\n"
-    print "p0Vec: ", p0Vect, "\n"
-    return p0Vect, p1Vect, pAbusive
+            p0_num += train_matrix[i]
+            p0_denom += sum(train_matrix)
+    p1_vect = log(p1_num / p1_denom)
+    p0_vect = log(p0_num / p0_denom)
+    print "p1_vec: ", p1_vect, "\n"
+    print "p0_vec: ", p0_vect, "\n"
+    return p0_vect, p1_vect, p_abusive
 
 
-def classifyNB(test_vector, p0Vec, p1Vec, pClass1):
-    p1 = sum(test_vector * p1Vec) + log(pClass1)
-    p0 = sum(test_vector * p0Vec) + log(1.0 - pClass1)
-    if p1 > p0:
+def classify_nb(test_vector, p0_vec, p1_vec, p_class1):
+    ''' docstring'''
+    p_spam = sum(test_vector * p1_vec) + log(p_class1)
+    p_notspam = sum(test_vector * p0_vec) + log(1.0 - p_class1)
+    if p_spam > p_notspam:
         return 1
     else:
         return 0
 
 
-def testingNB():
+def testing_nb():
+    ''' docstring '''
     documents, labels = load_documents()
     vocabulary = create_vocabulary(documents)
-    trainMat = []
+    train_mat = []
     for document in documents:
-        trainMat.append(setOfWords2Vec(vocabulary, document))
-    p0V, p1V, pAb = trainNBO(trainMat, labels)
-    print "p0V: ", p0V, "\n"
-    print "p1V: ", p1V, "\n"
-    print "pAb: ", pAb, "\n"
-    testEntry = ['love', 'my', 'dalmation']
-    thisDoc = array(setOfWords2Vec(vocabulary, testEntry))
-    print testEntry, 'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
-    testEntry = ['stupid', 'garbage']
-    thisDoc = array(setOfWords2Vec(vocabulary, testEntry))
-    print testEntry, 'classifed as: ', classifyNB(thisDoc, p0V, p1V, pAb)
+        train_mat.append(set_of_words_2_vec(vocabulary, document))
+    p0_vector, p1_vector, p_abusive = train_nbo(train_mat, labels)
+    print "p0_vector: ", p0_vector, "\n"
+    print "p1_vector: ", p1_vector, "\n"
+    print "pAb: ", p_abusive, "\n"
+    test_entry = ['love', 'my', 'dalmation']
+    this_doc = array(set_of_words_2_vec(vocabulary, test_entry))
+    print test_entry, 'classifed as: ', classify_nb(this_doc, p0_vector, p1_vector, p_abusive)
+    test_entry = ['stupid', 'garbage']
+    this_doc = array(set_of_words_2_vec(vocabulary, test_entry))
+    print test_entry, 'classifed as: ', classify_nb(this_doc, p0_vector, p1_vector, p_abusive)
 
 
-def calcMostFreq(vocabList, fullText):
+def calc_most_freq(vocab_list, full_text):
+    '''docstring'''
     import operator
-    freqDict = {}
-    for token in vocabList:
-        freqDict[token] = fullText.count(token)
-    sortedFreq = sorted(freqDict.iteritems(),
-                        key=operator.itemgetter(1), reverse=True)
-    return sortedFreq[:30]
+    freq_dict = {}
+    for token in vocab_list:
+        freq_dict[token] = full_text.count(token)
+    sorted_freq = sorted(freq_dict.iteritems(),
+                         key=operator.itemgetter(1), reverse=True)
+    return sorted_freq[:30]
 
 
-def textParse(bigString):
+def text_parse(big_string):
+    '''docstring'''
     import re
-    listOfTokens = re.split(r'\W*', bigString)
-    return [tok.lower() for tok in listOfTokens if len(tok) > 2]
+    list_of_tokens = re.split(r'\W*', big_string)
+    return [tok.lower() for tok in list_of_tokens if len(tok) > 2]
 
 
-def spamTest():
-    docList = []
-    classList = []
-    fullText = []
+def spam_test():
+    '''docstring'''
+    doc_list = []
+    class_list = []
+    full_text = []
+
     # for i in range(1, 26):
     for i in range(1, 5):
-        wordList = textParse(open('lib/spam/%d.txt' % i).read())
-        docList.append(wordList)
-        fullText.extend(wordList)
-        classList.append(1)
-        wordList = textParse(open('lib/ham/%d.txt' % i).read())
-        docList.append(wordList)
-        fullText.extend(wordList)
-        classList.append(0)
-    vocabList = create_vocabulary(docList)
-    # trainingSet = range(50); testSet = []
-    # trainingSet = range(10); testSet = []
-    trainingSet = range(5)
-    testSet = []
+        word_list = text_parse(open('lib/spam/%d.txt' % i).read())
+        doc_list.append(word_list)
+        full_text.extend(word_list)
+        class_list.append(1)
+        word_list = text_parse(open('lib/ham/%d.txt' % i).read())
+        doc_list.append(word_list)
+        full_text.extend(word_list)
+        class_list.append(0)
+    vocab_list = create_vocabulary(doc_list)
+    # training_set = range(50); test_set = []
+    # training_set = range(10); test_set = []
+    training_set = range(5)
+    test_set = []
     # for i in range(10):
     for i in range(3):
-        randIndex = int(random.uniform(0, len(trainingSet)))
-        testSet.append(trainingSet[randIndex])
-        del(trainingSet[randIndex])
-    trainMat = []
-    trainClasses = []
-    for docIndex in trainingSet:
-        trainMat.append(setOfWords2Vec(vocabList, docList[docIndex]))
-        trainClasses.append(classList[docIndex])
-    p0V, p1V, pSpam = trainNBO(array(trainMat), array(trainClasses))
-    errorCount = 0
-    for docIndex in testSet:
-        wordVector = setOfWords2Vec(vocabList, docList[docIndex])
-        if classifyNB(array(wordVector), p0V, p1V, pSpam) != classList[docIndex]:
-            errorCount += 1
-    print "the error rate is: ", float(errorCount) / len(testSet)
+        rand_index = int(random.uniform(0, len(training_set)))
+        test_set.append(training_set[rand_index])
+        del training_set[rand_index]
+    train_mat = []
+    train_classes = []
+    for doc_index in training_set:
+        train_mat.append(set_of_words_2_vec(vocab_list, doc_list[doc_index]))
+        train_classes.append(class_list[doc_index])
+    p0_vector, p1_vector, p_spam = train_nbo(array(train_mat), array(train_classes))
+    error_count = 0
+    for doc_index in test_set:
+        word_vector = set_of_words_2_vec(vocab_list, doc_list[doc_index])
+        if classify_nb(array(word_vector), p0_vector, p1_vector, p_spam) != class_list[doc_index]:
+            error_count += 1
+    print "the error rate is: ", float(error_count) / len(test_set)
 
 
-def calcMostFreq(vocabList, fullText):
-    import operator
-    freqDict = {}
-    for token in vocabList:
-        freqDict[token] = fullText.count(token)
-    sortedFreq = sorted(freqDict.iteritems(),
-                        key=operator.itemgetter(1), reverse=True)
-    return sortedFreq[:30]
-
-
-def localWords(feed1, feed0):
+def local_words(feed1, feed0):
+    ''' docstring '''
     import feedparser
-    docList = []
-    classList = []
-    fullText = []
-    minLen = min(len(feed['entries']), len(feed0['entries']))
-    for i in range(minlen):
-        wordList = textParse(feed1['entries'][i]['summary'])
-        docList.append(wordList)
-        fullText.extend(wordList)
-        classList.append(1)
-        wordList = textParse(feed0['entries'][i]['summary'])
-        docList.append(wordList)
-        fullText.extend(wordList)
-        classList.append(0)
-    vocabList = createVocabList(docList)
-    top30Words = calcMostFreq(vocabList, fullText)
-    for pairW in top30Words:
-        if pairW[0] in vocabList:
-            vocabList.remove(pairW[0])
-    trainingSet = range(2 * minLen)
-    testSet = []
+    doc_list = []
+    class_list = []
+    full_text = []
+    # min_len = min(len(feed['entries']), len(feed0['entries']))
+    min_len = min(len(feed1['entries']), len(feed0['entries']))
+    for i in range(min_len):
+        word_list = text_parse(feed1['entries'][i]['summary'])
+        doc_list.append(word_list)
+        full_text.extend(word_list)
+        class_list.append(1)
+        word_list = text_parse(feed0['entries'][i]['summary'])
+        doc_list.append(word_list)
+        full_text.extend(word_list)
+        class_list.append(0)
+    vocab_list = create_vocabulary(doc_list)
+    top_30_words = calc_most_freq(vocab_list, full_text)
+    for pair_w in top_30_words:
+        if pair_w[0] in vocab_list:
+            vocab_list.remove(pair_w[0])
+    training_set = range(2 * min_len)
+    test_set = []
+
     for i in range(20):
-        randIndex = int(random.uniform(0, len(trainingSet)))
-        testSet.append(trainingSet[randIndex])
-        del(trainingSet[randIndex])
-    trainMat = []
-    trainClasses = []
-    for docIndex in trainingSet:
-        trainMat.append(bagOfWords2VecMN(vocabList, docList[docIndex]))
-        trainClasses.append(classList[docIndex])
-    p0V, p1V, pSpam = trainNB0(array(trainMat), array(trainClasses))
-    errorCount = 0
-    for docIndex in testSet:
-        wordVector = bagOfWords2VecMN(vocabList, docList[docIndex])
-        if classifyNB(array(wordVector), p0V, p1V, pSpam) != \
-                classList[docIndex]:
-            errorCount += 1
-    print 'the error rate is: ', float(errorCount) / len(testSet)
-    return vocabList, p0V, p1V
+        rand_index = int(random.uniform(0, len(training_set)))
+        test_set.append(training_set[rand_index])
+        del training_set[rand_index]
+    train_mat = []
+    train_classes = []
+
+    for doc_index in training_set:
+        train_mat.append(bag_of_words_2_vec_mn(vocab_list, doc_list[doc_index]))
+        train_classes.append(class_list[doc_index])
+    p0_vector, p1_vector, p_spam = train_nbo(array(train_mat), array(train_classes))
+    error_count = 0
+    for doc_index in test_set:
+        word_vector = bag_of_words_2_vec_mn(vocab_list, doc_list[doc_index])
+        if classify_nb(array(word_vector), p0_vector, p1_vector, p_spam) != \
+                class_list[doc_index]:
+            error_count += 1
+    print 'the error rate is: ', float(error_count) / len(test_set)
+    return vocab_list, p0_vector, p1_vector
