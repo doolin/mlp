@@ -64,38 +64,49 @@ def bag_of_words_2_vec_mn(vocab_list, input_set):
     return feature_labels
 
 
-def train_nbo(train_matrix, train_category):
+def train_nbo(train_matrix, classifications):
     ''' docstring '''
     print "sum(train_matrix): ", sum(train_matrix)
     num_train_docs = len(train_matrix)
     num_words = len(train_matrix[0])
-    print "train_category: ", train_category
-    print "sum(train_category): ", sum(train_category)
-    p_abusive = sum(train_category) / float(num_train_docs)
+    print "classifications: ", classifications
+    print "sum(classifications): ", sum(classifications)
+    p_abusive = sum(classifications) / float(num_train_docs)
     p0_num = ones(num_words)
     p1_num = ones(num_words)
-    print "p0_num: ", p0_num
+    # print "p0_num: ", p0_num
     p0_denom = 2.0
     p1_denom = 2.0
-    print "range(num_train_docs: ", range(num_train_docs), "\n"
+
     for i in range(num_train_docs):
-        if train_category[i] == 1:
+        if classifications[i] == 1:
             p1_num += train_matrix[i]
             p1_denom += sum(train_matrix)
         else:
             p0_num += train_matrix[i]
             p0_denom += sum(train_matrix)
+
     p1_vect = log(p1_num / p1_denom) # pylint: disable=undefined-variable
     p0_vect = log(p0_num / p0_denom) # pylint: disable=undefined-variable
-    print "p1_vec: ", p1_vect, "\n"
-    print "p0_vec: ", p0_vect, "\n"
+    # print "p1_vect: ", p1_vect, "\n"
+    # print "p0_vect: ", p0_vect, "\n"
     return p0_vect, p1_vect, p_abusive
 
+def multiply(this_doc, p_vec): # pylint: disable=missing-docstring
+    return this_doc * p_vec
 
-def classify_nb(test_vector, p0_vec, p1_vec, p_class1):
+def compute_probability_spam(this_doc, p1_vec, p_class1): # pylint: disable=missing-docstring
+    return sum(multiply(this_doc, p1_vec)) + log(p_class1) # pylint: disable=undefined-variable
+
+def compute_probability_notspam(this_doc, p0_vec, p_class1): # pylint: disable=missing-docstring
+    return sum(multiply(this_doc, p0_vec)) + log(1.0 - p_class1) # pylint: disable=undefined-variable
+
+def classify_nb(this_doc, p0_vec, p1_vec, p_class1):
     ''' docstring'''
-    p_spam = sum(test_vector * p1_vec) + log(p_class1) # pylint: disable=undefined-variable
-    p_notspam = sum(test_vector * p0_vec) + log(1.0 - p_class1) # pylint: disable=undefined-variable
+    p_spam = compute_probability_spam(this_doc, p1_vec, p_class1)
+    p_notspam = compute_probability_notspam(this_doc, p0_vec, p_class1)
+    print "p_spam: ", p_spam, "\n"
+    print "p_notspam: ", p_notspam, "\n"
     if p_spam > p_notspam:
         return 1
     else:
@@ -110,22 +121,23 @@ def testing_nb():
     for document in documents:
         train_mat.append(set_of_words_2_vec(vocabulary, document))
     p0_vector, p1_vector, p_abusive = train_nbo(train_mat, classifications)
-    print "p0_vector: ", p0_vector, "\n"
-    print "p1_vector: ", p1_vector, "\n"
+    print "p0_vector: ", p0_vector, " length: ", len(p0_vector), "\n"
+    print "p1_vector: ", p1_vector, " length: ", len(p1_vector), "\n"
     print "pAb: ", p_abusive, "\n"
     test_entry = ['love', 'my', 'dalmation']
     this_doc = array(set_of_words_2_vec(vocabulary, test_entry))
+    print "this_doc", this_doc, "length: ", len(this_doc), "\n"
     print test_entry, 'classifed as: ', classify_nb(this_doc, p0_vector, p1_vector, p_abusive)
     test_entry = ['stupid', 'garbage']
     this_doc = array(set_of_words_2_vec(vocabulary, test_entry))
     print test_entry, 'classifed as: ', classify_nb(this_doc, p0_vector, p1_vector, p_abusive)
 
 
-def calc_most_freq(vocab_list, full_text):
+def calc_most_freq(vocabulary, full_text):
     '''docstring'''
     import operator
     freq_dict = {}
-    for token in vocab_list:
+    for token in vocabulary:
         freq_dict[token] = full_text.count(token)
     sorted_freq = sorted(freq_dict.iteritems(),
                          key=operator.itemgetter(1), reverse=True)
@@ -141,21 +153,21 @@ def text_parse(big_string):
 
 def spam_test():
     '''docstring'''
-    doc_list = []
+    documents = []
     class_list = []
     full_text = []
 
     # for i in range(1, 26):
     for i in range(1, 5):
         word_list = text_parse(open('lib/spam/%d.txt' % i).read())
-        doc_list.append(word_list)
+        documents.append(word_list)
         full_text.extend(word_list)
         class_list.append(1)
         word_list = text_parse(open('lib/ham/%d.txt' % i).read())
-        doc_list.append(word_list)
+        documents.append(word_list)
         full_text.extend(word_list)
         class_list.append(0)
-    vocab_list = create_vocabulary(doc_list)
+    vocab_list = create_vocabulary(documents)
     # training_set = range(50); test_set = []
     # training_set = range(10); test_set = []
     training_set = range(5)
@@ -168,12 +180,12 @@ def spam_test():
     train_mat = []
     train_classes = []
     for doc_index in training_set:
-        train_mat.append(set_of_words_2_vec(vocab_list, doc_list[doc_index]))
+        train_mat.append(set_of_words_2_vec(vocab_list, documents[doc_index]))
         train_classes.append(class_list[doc_index])
     p0_vector, p1_vector, p_spam = train_nbo(array(train_mat), array(train_classes))
     error_count = 0
     for doc_index in test_set:
-        word_vector = set_of_words_2_vec(vocab_list, doc_list[doc_index])
+        word_vector = set_of_words_2_vec(vocab_list, documents[doc_index])
         if classify_nb(array(word_vector), p0_vector, p1_vector, p_spam) != class_list[doc_index]:
             error_count += 1
     print "the error rate is: ", float(error_count) / len(test_set)
@@ -196,8 +208,8 @@ def local_words(feed1, feed0):
         doc_list.append(word_list)
         full_text.extend(word_list)
         class_list.append(0)
-    vocab_list = create_vocabulary(doc_list)
-    top_30_words = calc_most_freq(vocab_list, full_text)
+    vocabulary = create_vocabulary(doc_list)
+    top_30_words = calc_most_freq(vocabulary, full_text)
     for pair_w in top_30_words:
         if pair_w[0] in vocab_list:
             vocab_list.remove(pair_w[0])

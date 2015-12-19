@@ -33,6 +33,9 @@ class TestNB(unittest.TestCase):
         self.assertEqual(features, expected)
 
 
+    # def test_classify_nb(test_vector, p0_vec, p1_vec, p_class1):
+
+
     def test_create_vocabulary(self):
         documents = [
             ['stupid', 'garbage'],
