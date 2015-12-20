@@ -159,7 +159,7 @@ def text_parse(big_string):
 def spam_test():
     '''docstring'''
     documents = []
-    class_list = []
+    classifications = []
     full_text = []
 
     # for i in range(1, 26):
@@ -167,12 +167,15 @@ def spam_test():
         word_list = text_parse(open('lib/spam/%d.txt' % i).read())
         documents.append(word_list)
         full_text.extend(word_list)
-        class_list.append(1)
+        classifications.append(1)
+
         word_list = text_parse(open('lib/ham/%d.txt' % i).read())
         documents.append(word_list)
         full_text.extend(word_list)
-        class_list.append(0)
+        classifications.append(0)
+
     vocabulary = create_vocabulary(documents)
+
     # training_set = range(50); test_set = []
     # training_set = range(10); test_set = []
     training_set = range(5)
@@ -186,13 +189,14 @@ def spam_test():
     train_classes = []
     for doc_index in training_set:
         train_mat.append(set_of_words_2_vec(vocabulary, documents[doc_index]))
-        train_classes.append(class_list[doc_index])
+        train_classes.append(classifications[doc_index])
     p0_vector, p1_vector, p_spam = train_nbo(
         array(train_mat), array(train_classes))
+
     error_count = 0
     for doc_index in test_set:
         word_vector = set_of_words_2_vec(vocabulary, documents[doc_index])
-        if classify_nb(array(word_vector), p0_vector, p1_vector, p_spam) != class_list[doc_index]:
+        if classify_nb(array(word_vector), p0_vector, p1_vector, p_spam) != classifications[doc_index]:
             error_count += 1
     print "the error rate is: ", float(error_count) / len(test_set)
 
@@ -201,7 +205,7 @@ def local_words(feed1, feed0):
     ''' docstring '''
     import feedparser
     doc_list = []
-    class_list = []
+    classifications = []
     full_text = []
     # min_len = min(len(feed['entries']), len(feed0['entries']))
     min_len = min(len(feed1['entries']), len(feed0['entries']))
@@ -209,13 +213,17 @@ def local_words(feed1, feed0):
         word_list = text_parse(feed1['entries'][i]['summary'])
         doc_list.append(word_list)
         full_text.extend(word_list)
-        class_list.append(1)
+        classifications.append(1)
+
         word_list = text_parse(feed0['entries'][i]['summary'])
         doc_list.append(word_list)
         full_text.extend(word_list)
-        class_list.append(0)
+        classifications.append(0)
+
     vocabulary = create_vocabulary(doc_list)
+
     top_30_words = calc_most_freq(vocabulary, full_text)
+
     for pair_w in top_30_words:
         if pair_w[0] in vocabulary:
             vocabulary.remove(pair_w[0])
@@ -232,14 +240,15 @@ def local_words(feed1, feed0):
     for doc_index in training_set:
         train_mat.append(bag_of_words_2_vec_mn(
             vocabulary, doc_list[doc_index]))
-        train_classes.append(class_list[doc_index])
+        train_classes.append(classifications[doc_index])
     p0_vector, p1_vector, p_spam = train_nbo(
         array(train_mat), array(train_classes))
+
     error_count = 0
     for doc_index in test_set:
         word_vector = bag_of_words_2_vec_mn(vocabulary, doc_list[doc_index])
         if classify_nb(array(word_vector), p0_vector, p1_vector, p_spam) != \
-                class_list[doc_index]:
+                classifications[doc_index]:
             error_count += 1
     print 'the error rate is: ', float(error_count) / len(test_set)
     return vocabulary, p0_vector, p1_vector
