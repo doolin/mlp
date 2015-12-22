@@ -14,9 +14,7 @@ import bayes_literate as bayes
 class TestNB(unittest.TestCase):
 
     def test_set_of_words_2_vec(self):
-        # listOPosts is actually...
-        # listClasses is actually a list of labels for the data in listOPosts
-        documents, labels = bayes.load_documents()
+        documents, classifications = bayes.load_documents()  # pylint: disable=unused-variable
         vocabulary = bayes.create_vocabulary(documents)
         features = bayes.set_of_words_2_vec(vocabulary, documents[0])
         expected = [
@@ -83,20 +81,20 @@ class TestNB(unittest.TestCase):
         self.assertTrue(len(word_list) == len(expected))
 
     def test_train_nbo(self):
-        listOPosts, listClasses = bayes.load_documents()
-        myVocabList = bayes.create_vocabulary(listOPosts)
+        documents, classifications = bayes.load_documents()
+        vocabulary = bayes.create_vocabulary(documents)
         trainmat = []  # list of lists, e.g., [[...], ..., [...]]
-        for postindoc in listOPosts:
-            trainmat.append(bayes.set_of_words_2_vec(myVocabList, postindoc))
+        for document in documents:
+            trainmat.append(bayes.set_of_words_2_vec(vocabulary, document))
         # this is interesting as the names sent to the funtion imply
         # different types than the names received by the function.
-        # Compare sending trainCategory to receiving listClasses.
+        # Compare sending trainCategory to receiving classifications.
         # There isn't even a hint of meaning between those two names
         # at the program (self-referentiall) perspective.
         # p0Vect, p1Vect, pAbusive = trainNBO(trainMatrix, trainCategory)
-        p0V, p1V, pAb = bayes.train_nbo(trainmat, listClasses)
+        p0_vec, p1_vec, p_abusive = bayes.train_nbo(trainmat, classifications)
         # print p0V, p1V, pAb
-        self.assertAlmostEqual(pAb, 0.5)
+        self.assertAlmostEqual(p_abusive, 0.5)
         # self.assertTrue(False)
 
     def test_text_parse(self):
