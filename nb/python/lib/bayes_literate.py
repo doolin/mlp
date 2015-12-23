@@ -117,11 +117,20 @@ def classify_nb(this_doc, p0_vec, p1_vec, p_class1):
     else:
         return 0
 
+# The "labeler" (set_of_words_to_vec) might be able to be passed
+# in as a callback.
+def build_training_matrix(vocabulary, documents):
+    '''extracted from test case'''
+    train_mat = []
+    for document in documents:
+        train_mat.append(set_of_words_2_vec(vocabulary, document))
+    return train_mat
 
 def testing_nb():
     ''' docstring '''
     documents, classifications = load_documents()
     vocabulary = create_vocabulary(documents)
+    # todo: use testable function
     train_mat = []
     for document in documents:
         train_mat.append(set_of_words_2_vec(vocabulary, document))
