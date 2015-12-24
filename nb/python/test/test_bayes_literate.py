@@ -103,6 +103,21 @@ class TestNB(unittest.TestCase):
         actual = bayes.text_parse(big_string)
         self.assertEqual(expected, actual)
 
+    def test_build_training_matrix(self):
+        vocabulary = ['foo', 'bar', 'baz']
+        documents = [
+            ['foo', 'bar'],
+            ['bar', 'baz']
+        ]
+
+        expected = [
+            [1, 1, 0],
+            [0, 1, 1]
+        ]
+
+        actual = bayes.build_training_matrix(vocabulary, documents)
+        print "Actual training matrix: ", actual
+        self.assertEqual(actual, expected)
 
 if __name__ == '__main__':
     unittest.main()

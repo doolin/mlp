@@ -130,10 +130,8 @@ def testing_nb():
     ''' docstring '''
     documents, classifications = load_documents()
     vocabulary = create_vocabulary(documents)
-    # todo: use testable function
-    train_mat = []
-    for document in documents:
-        train_mat.append(set_of_words_2_vec(vocabulary, document))
+    train_mat = build_training_matrix(vocabulary, documents)
+
     p0_vector, p1_vector, p_abusive = train_nbo(train_mat, classifications)
     print "p0_vector: ", p0_vector, " length: ", len(p0_vector), "\n"
     print "p1_vector: ", p1_vector, " length: ", len(p1_vector), "\n"
