@@ -117,20 +117,20 @@ def classify_nb(this_doc, p0_vec, p1_vec, p_class1):
     else:
         return 0
 
-# The "labeler" (set_of_words_to_vec) might be able to be passed
-# in as a callback.
-def build_training_matrix(vocabulary, documents):
-    '''extracted from test case'''
+def build_training_matrix(vocabulary, documents, labeler):
+    '''extracted from test case
+       labeler is indicates presence or absence of a word
+       in the vocabulary'''
     train_mat = []
     for document in documents:
-        train_mat.append(set_of_words_2_vec(vocabulary, document))
+        train_mat.append(labeler(vocabulary, document))
     return train_mat
 
 def testing_nb():
     ''' docstring '''
     documents, classifications = load_documents()
     vocabulary = create_vocabulary(documents)
-    train_mat = build_training_matrix(vocabulary, documents)
+    train_mat = build_training_matrix(vocabulary, documents, set_of_words_2_vec)
 
     p0_vector, p1_vector, p_abusive = train_nbo(train_mat, classifications)
     print "p0_vector: ", p0_vector, " length: ", len(p0_vector), "\n"

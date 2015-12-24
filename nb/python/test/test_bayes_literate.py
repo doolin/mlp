@@ -103,11 +103,12 @@ class TestNB(unittest.TestCase):
         actual = bayes.text_parse(big_string)
         self.assertEqual(expected, actual)
 
-    def test_build_training_matrix(self):
+    def test_build_training_matrix_uw(self):
+        '''uw for unweighted'''
         vocabulary = ['foo', 'bar', 'baz']
         documents = [
-            ['foo', 'bar'],
-            ['bar', 'baz']
+            ['foo', 'bar', 'foo', 'foo'],
+            ['bar', 'baz', 'baz', 'baz']
         ]
 
         expected = [
@@ -115,9 +116,27 @@ class TestNB(unittest.TestCase):
             [0, 1, 1]
         ]
 
-        actual = bayes.build_training_matrix(vocabulary, documents)
+        actual = bayes.build_training_matrix(vocabulary, documents, bayes.set_of_words_2_vec)
         print "Actual training matrix: ", actual
         self.assertEqual(actual, expected)
+
+    def test_build_training_matrix_w(self):
+        '''w for weighted'''
+        vocabulary = ['foo', 'bar', 'baz']
+        documents = [
+            ['foo', 'bar', 'foo', 'foo'],
+            ['bar', 'baz', 'baz', 'baz']
+        ]
+
+        expected = [
+            [3, 1, 0],
+            [0, 1, 3]
+        ]
+
+        actual = bayes.build_training_matrix(vocabulary, documents, bayes.bag_of_words_2_vec_mn)
+        print "Actual training matrix: ", actual
+        self.assertEqual(actual, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
