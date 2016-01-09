@@ -38,6 +38,18 @@ class TestNB(unittest.TestCase):
         ]
         self.assertEqual(actual, expected)
 
+    def test_spam_probability(self):
+        training_set = [
+            ("foo bar", 1),
+            ("bar baz", 0)
+        ]
+        counts = nb.count_words(training_set)
+        word_probs = nb.word_probabilities(counts, 1, 1)
+        message = "there is no foo bar like bar bar"
+        actual = nb.spam_probability(word_probs, message)
+        expected = 0.9
+        self.assertAlmostEqual(actual, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

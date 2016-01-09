@@ -25,7 +25,7 @@ def word_probabilities(counts, total_spams, total_non_spams, k=0.5):
              (non_spam + k) / (total_non_spams + 2 * k))
             for w, (spam, non_spam) in counts.iteritems()]
 
-def spam_probabilities(word_probs, message):
+def spam_probability(word_probs, message):
     message_words = tokenize(message)
     log_prob_if_spam = log_prob_if_not_spam = 0.0
 
