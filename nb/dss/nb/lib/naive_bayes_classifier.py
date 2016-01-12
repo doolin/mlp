@@ -1,7 +1,8 @@
 # pylint: disable=missing-docstring
 
-import sys
-sys.path.append('../lib')
+#import sys
+#sys.path.append('../lib')
+
 import nb
 
 class NaiveBayesClassifier(object):
