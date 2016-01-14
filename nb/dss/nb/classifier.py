@@ -55,5 +55,33 @@ def spamfinder():
 
     print counts
 
+    classified.sort(key=lambda row: row[2])
+    spammiest_hams = filter(lambda row: not row[1], classified)[-5:]
+
+    # the lowest predicted spam probabilities among the actual spams
+    hammiest_spams = filter(lambda row: row[1], classified)[:5]
+
+    print spammiest_hams
+    print hammiest_spams
+
+    words = sorted(classifier.word_probs, key=p_spam_given_word)
+
+    print words
+
+    spammiest_words = words[-5:]
+    hammiest_words = words[:5]
+
+    print spammiest_words
+    print hammiest_words
+
+def p_spam_given_word(word_prob):
+    """uses bayes's theorem to compute p(spam | message contains word)"""
+
+    # word_prob is one of the triplets produced by word_probabilities
+    word, prob_if_spam, prob_if_not_spam = word_prob
+    return prob_if_spam / (prob_if_spam + prob_if_not_spam)
+
+
+
 if __name__ == "__main__":
     spamfinder()
