@@ -110,8 +110,8 @@ def classify_nb(this_doc, p0_vec, p1_vec, p_class1):
     ''' docstring'''
     p_spam = compute_probability_spam(this_doc, p1_vec, p_class1)
     p_notspam = compute_probability_notspam(this_doc, p0_vec, p_class1)
-    print "p_spam: ", p_spam, "\n"
-    print "p_notspam: ", p_notspam, "\n"
+    # print "p_spam: ", p_spam, "\n"
+    # print "p_notspam: ", p_notspam, "\n"
     if p_spam > p_notspam:
         return 1
     else:
