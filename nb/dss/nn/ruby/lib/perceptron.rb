@@ -7,7 +7,7 @@ class Perceptron
   end
 
   def step_function(x)
-    x > 1 ? 1 : 0
+    x >= 0 ? 1 : 0
   end
 
   def think(u)
