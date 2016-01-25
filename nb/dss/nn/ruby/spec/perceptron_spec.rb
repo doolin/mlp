@@ -33,12 +33,41 @@ describe Perceptron do
       expect(subject.think(u)).to be 0
     end
 
-    it "return 0 for [0, 1]" do
+    it "returns 0 for [0, 1]" do
       u = NMatrix.new([2], [0, 1])
+      expect(subject.think(u)).to be 0
+    end
+
+    it "returns 0 for [0, 0]" do
+      u = NMatrix.new([2], [0, 0])
       expect(subject.think(u)).to be 0
     end
   end
 
+  # Figure out how to extract a gate and pass it around as a function.
+  # Probably need to use to_proc in ruby
   describe "OR gate" do
+    let(:bias) { -1 }
+    subject { Perceptron.new(weights: weights, bias: bias) }
+
+    it "return 1 for both inputs 1" do
+      u = NMatrix.new([2], [1, 1])
+      expect(subject.think(u)).to be 1
+    end
+
+    it "return 0 for [1, 0]" do
+      u = NMatrix.new([2], [1, 0])
+      expect(subject.think(u)).to be 1
+    end
+
+    it "return 0 for [0, 1]" do
+      u = NMatrix.new([2], [0, 1])
+      expect(subject.think(u)).to be 1
+    end
+
+    it "returns 0 for [0, 0]" do
+      u = NMatrix.new([2], [0, 0])
+      expect(subject.think(u)).to be 0
+    end
   end
 end
