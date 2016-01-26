@@ -70,4 +70,10 @@ describe Perceptron do
       expect(subject.think(u)).to be 0
     end
   end
+
+  describe "sigmoid" do
+    it "computes a sigmoid" do
+      expect(subject.sigmoid(1.0)).to be 1.0
+    end
+  end
 end

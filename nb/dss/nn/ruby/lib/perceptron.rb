@@ -13,4 +13,8 @@ class Perceptron
   def think(u)
     step_function(@weights.dot(u).to_f + @bias)
   end
+
+  def sigmoid(t)
+    1.0 / (1.0 + Math.exp(-t))
+  end
 end
