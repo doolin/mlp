@@ -73,7 +73,8 @@ describe Perceptron do
 
   describe "sigmoid" do
     it "computes a sigmoid" do
-      expect(subject.sigmoid(1.0)).to be 1.0
+      expect(subject.sigmoid(1.0)).to be < 1.0
+      expect(subject.sigmoid(1.0)).to be > 0.0
     end
   end
 end
