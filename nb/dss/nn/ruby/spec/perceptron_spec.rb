@@ -73,8 +73,23 @@ describe Perceptron do
 
   describe "sigmoid" do
     it "computes a sigmoid" do
-      expect(subject.sigmoid(1.0)).to be < 1.0
-      expect(subject.sigmoid(1.0)).to be > 0.0
+      expect(Perceptron.sigmoid(1.0)).to be < 1.0
+      expect(Perceptron.sigmoid(1.0)).to be > 0.0
+    end
+  end
+
+  describe "neuron_output" do
+    it "resolves a neuron" do
+      weights = NMatrix.new([2], [0, 0])
+      inputs = NMatrix.new([2], [0, 0])
+      expect(Perceptron.neuron_output(weights, inputs)).to be < 1.0
+    end
+  end
+
+  describe "feed_forward" do
+    it "forward propagates input" do
+      skip
+      expect(subject.feed_forward(neural_network, input_vector)).to be < 1.0
     end
   end
 end

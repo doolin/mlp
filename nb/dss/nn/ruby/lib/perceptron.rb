@@ -14,7 +14,11 @@ class Perceptron
     step_function(@weights.dot(u).to_f + @bias)
   end
 
-  def sigmoid(t)
+  def self.sigmoid(t)
     1.0 / (1.0 + Math.exp(-t))
+  end
+
+  def self.neuron_output(weights, inputs)
+    sigmoid(weights.dot(inputs).to_f)
   end
 end
