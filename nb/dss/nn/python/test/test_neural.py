@@ -19,10 +19,19 @@ class TestNB(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_perceptron_output(self):
-        weights = [1, 1]
-        bias = 1.0
-        x = [1, 2]
+        # and gate
+        weights = [2, 2]
+        bias = -3.0
+        x = [1, 1]
         expected = 1.0
+        actual = neural.perceptron_output(weights, bias, x)
+        self.assertEqual(actual, expected)
+
+        # or gate
+        weights = [2, 2]
+        bias = -3.0
+        x = [1, 0]
+        expected = 0.0
         actual = neural.perceptron_output(weights, bias, x)
         self.assertEqual(actual, expected)
 
