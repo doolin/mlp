@@ -13,3 +13,6 @@ def perceptron_output(weights, bias, x):
 
 def sigmoid(t):
     return 1 / (1 + math.exp(-t))
+
+def neuron_output(weights, inputs):
+    return sigmoid(numpy.dots(weights, inputs))
