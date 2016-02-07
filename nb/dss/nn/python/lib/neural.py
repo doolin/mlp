@@ -16,3 +16,22 @@ def sigmoid(t):
 
 def neuron_output(weights, inputs):
     return sigmoid(numpy.dots(weights, inputs))
+
+def feed_forward(neural_network, input_vector):
+    """takes in a neural network
+    (represented as a list of lists of lists of weights)
+    and returns the output from forward-propagating the input"""
+
+    outputs = []
+
+    # process one layer at a time
+    for layer in neural_network:
+        input_with_bias = input_vector + [1]
+        output = [neuron_output(neuron, input_with_bias)
+                  for neuron in layer]
+        outputs.append(output)
+
+        # then the input to the next layer is the output of this one
+        input_vector = output
+
+    return outputs
