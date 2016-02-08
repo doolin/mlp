@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# pylint: disable=missing-docstring
+# pylint: disable=missing-docstring,invalid-name
 
 import unittest
 import sys
@@ -35,6 +35,21 @@ class TestNB(unittest.TestCase):
         actual = neural.perceptron_output(weights, bias, x)
         self.assertEqual(actual, expected)
 
+    def test_feed_forward(self):
+        xor_network = [ # hidden layer
+            [[20, 20, -30],
+             [20, 20, -10]],
+            # output layer
+            [[-60, 60, -30]]
+        ]
+
+        output = []
+        for x in [0, 1]:
+            for y in [0, 1]:
+                print x, y, neural.feed_forward(xor_network, [x, y])[-1]
+                output.append(neural.feed_forward(xor_network, [x, y])[-1])
+
+        print output
 
 if __name__ == '__main__':
     unittest.main()

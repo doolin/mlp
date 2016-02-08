@@ -15,7 +15,7 @@ def sigmoid(t):
     return 1 / (1 + math.exp(-t))
 
 def neuron_output(weights, inputs):
-    return sigmoid(numpy.dots(weights, inputs))
+    return sigmoid(numpy.dot(weights, inputs))
 
 def feed_forward(neural_network, input_vector):
     """takes in a neural network
