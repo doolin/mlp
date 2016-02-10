@@ -10,6 +10,14 @@ from numpy import *
 sys.path.append('../lib')
 import neural as neural
 
+# pylint: disable=bad-whitespace
+zero_digit = [
+    1,1,1,1,1,
+    1,0,0,0,1,
+    1,0,0,0,1,
+    1,0,0,0,1,
+    1,1,1,1,1
+]
 
 class TestNB(unittest.TestCase):
 
