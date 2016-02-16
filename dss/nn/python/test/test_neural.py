@@ -46,7 +46,13 @@ four_digit = [
     0,0,0,0,1,
     0,0,0,0,1
 ]
-
+five_digit = [
+    1,1,1,1,1,
+    1,0,0,0,0,
+    1,1,1,1,1,
+    0,0,0,0,1,
+    1,1,1,1,1
+]
 
 class TestNB(unittest.TestCase):
 
