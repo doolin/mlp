@@ -60,6 +60,13 @@ six_digit = [
     1,0,0,0,1,
     1,1,1,1,1
 ]
+seven_digit = [
+    1,1,1,1,1,
+    0,0,0,0,1,
+    0,0,0,0,1,
+    0,0,0,0,1,
+    0,0,0,0,1
+]
 
 class TestNB(unittest.TestCase):
 
