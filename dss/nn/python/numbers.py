@@ -87,4 +87,16 @@ input_size = 25  # each input is a vector of length 25
 num_hidden = 5   # we'll have 5 neurons in the hidden layer
 output_size = 10 # we need 10 outputs for each input
 
+# each hidden neuron has one weight per input, plus a bias weight
+hidden_layer = [[random.random() for __ in range(input_size + 1)]
+                for __ in range(num_hidden)]
 
+# each output neuron has one weight per hidden neuron, plus a bias weight
+output_layer = [[random.random() for __ in range(num_hidden + 1)]
+                for __ in range(output_size)]
+
+# the network starts out with random weights
+network = [hidden_layer, output_layer]
+
+# train it using the back propagation algorithm
+# 10,000 iterations seems enough to converge
