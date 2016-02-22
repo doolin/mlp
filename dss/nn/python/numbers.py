@@ -3,9 +3,11 @@
 # pylint: disable=missing-docstring
 
 import sys
+import random
 
 sys.path.append('./lib')
-import neural as neural
+import is_neural as neural
+# from is_neural import foobar
 
 # pylint: disable=bad-whitespace
 zero_digit = [
@@ -79,6 +81,19 @@ nine_digit = [
     1,1,1,1,1
 ]
 
+inputs = [
+    zero_digit,
+    one_digit,
+    two_digit,
+    three_digit,
+    four_digit,
+    five_digit,
+    six_digit,
+    seven_digit,
+    eight_digit,
+    nine_digit
+]
+
 targets = [[1 if i == j else 0 for i in range(10)]
            for j in range(10)]
 
@@ -100,3 +115,9 @@ network = [hidden_layer, output_layer]
 
 # train it using the back propagation algorithm
 # 10,000 iterations seems enough to converge
+for __ in range(10000):
+    for input_vector, target_vector in zip(inputs, targets):
+        neural.foobar(network, input_vector, target_vector)
+
+def predict(input):
+    return neural.feed_forward(network, input)[-1]

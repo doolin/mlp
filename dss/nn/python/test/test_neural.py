@@ -8,7 +8,7 @@ import sys
 from numpy import *
 
 sys.path.append('../lib')
-import neural as neural
+import is_neural as neural
 
 class TestNB(unittest.TestCase):
 

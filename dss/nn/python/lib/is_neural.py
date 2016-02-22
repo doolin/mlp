@@ -36,7 +36,8 @@ def feed_forward(neural_network, input_vector):
 
     return outputs
 
-def backpropagate(network, input_vector, targets):
+#def backpropagate(network, input_vector, targets):
+def foobar(network, input_vector, targets):
 
     hidden_outputs, outputs = feed_forward(network, input_vector)
 
