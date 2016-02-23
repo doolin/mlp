@@ -1,13 +1,16 @@
-#!/usr/bin/env python
-
 # pylint: disable=missing-docstring
 
 import sys
 import random
 
 sys.path.append('./lib')
-import is_neural as neural
+import is_neural as is_neural
 # from is_neural import foobar
+print dir(is_neural)
+
+import inspect
+# all_functions = inspect.getmembers(module, inspect.isfunction)
+# print all_functions
 
 # pylint: disable=bad-whitespace
 zero_digit = [
@@ -115,9 +118,20 @@ network = [hidden_layer, output_layer]
 
 # train it using the back propagation algorithm
 # 10,000 iterations seems enough to converge
+n = is_neural.IsNeural()
+
 for __ in range(10000):
     for input_vector, target_vector in zip(inputs, targets):
-        neural.foobar(network, input_vector, target_vector)
+        # is_neural.foobar(network, input_vector, target_vector)
+        n.foobar(network, input_vector, target_vector)
 
 def predict(input):
     return neural.feed_forward(network, input)[-1]
+
+def runit():
+    print "runit"
+
+if __name__ == "__main__":
+    # do nothing
+    runit()
+
