@@ -36,7 +36,6 @@ def feed_forward(neural_network, input_vector):
 
     return outputs
 
-#def backpropagate(network, input_vector, targets):
 def backpropagate(network, input_vector, targets):
 
     hidden_outputs, outputs = feed_forward(network, input_vector)
@@ -54,7 +53,12 @@ def backpropagate(network, input_vector, targets):
             output_neuron[j] -= output_deltas[i] * hidden_output
 
     hidden_deltas = [hidden_output * (1 - hidden_output) *
-                     dot(output_deltas, [n[i] for n in output_layer])
+                     # this function errors in output_layer which is not
+                     # defined here, it's defined in the calling function.
+                     # Not sure if this is a bug in the book, or a consequence
+                     # of modularizing the code. The book apparently assumes
+                     # all the code will be in one flat file.
+                     numpy.dot(output_deltas, [n[i] for n in output_layer])
                      for i, hidden_output in enumerate(hidden_outputs)]
 
     # adjust weights for hidden layer, one neuron at a time

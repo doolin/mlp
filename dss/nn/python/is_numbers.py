@@ -8,10 +8,6 @@ import random
 sys.path.append('./lib')
 import is_neural as is_neural
 
-import inspect
-# all_functions = inspect.getmembers(module, inspect.isfunction)
-# print all_functions
-
 # pylint: disable=bad-whitespace
 zero_digit = [
     1,1,1,1,1,
