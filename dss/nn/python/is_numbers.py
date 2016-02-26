@@ -124,5 +124,13 @@ for __ in range(10000):
 def predict(input):
     return is_neural.feed_forward(network, input)[-1]
 
-def runit():
-    print "runit"
+# [0.026, 0.0, 0.0, 0.018, 0.001, 0.0, 0.0, 0.967, 0.0, 0.0]
+print predict(inputs[7])
+
+predict([
+    0,1,1,1,0, # .@@@
+    0,0,0,1,1, # ...@@
+    0,0,1,1,0, # ..@@
+    0,0,0,1,1, # ...@@
+    0,1,1,1,0]) # .@@@.
+
