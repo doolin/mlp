@@ -52,6 +52,8 @@ def backpropagate(network, input_vector, targets):
             # this neuron's delta and its jth input
             output_neuron[j] -= output_deltas[i] * hidden_output
 
+    output_layer = network[-1]
+
     hidden_deltas = [hidden_output * (1 - hidden_output) *
                      # this function errors in output_layer which is not
                      # defined here, it's defined in the calling function.

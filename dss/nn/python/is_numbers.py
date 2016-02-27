@@ -113,11 +113,11 @@ output_layer = [[random.random() for __ in range(num_hidden + 1)]
 network = [hidden_layer, output_layer]
 
 # train it using the back propagation algorithm
-# 10,000 iterations seems enough to converge
+# 10,000 iterations seems enough to converge [from the book]
 for __ in range(10000):
     for input_vector, target_vector in zip(inputs, targets):
-        print input_vector
-        print target_vector
+        # print input_vector
+        # print target_vector
         # is_neural.foobar(network, input_vector, target_vector)
         is_neural.backpropagate(network, input_vector, target_vector)
 
