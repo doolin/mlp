@@ -114,7 +114,8 @@ network = [hidden_layer, output_layer]
 
 # train it using the back propagation algorithm
 # 10,000 iterations seems enough to converge [from the book]
-for __ in range(10000):
+# for __ in range(10000):
+for __ in range(1000):
     for input_vector, target_vector in zip(inputs, targets):
         # print input_vector
         # print target_vector
@@ -133,4 +134,35 @@ predict([
     0,0,1,1,0, # ..@@
     0,0,0,1,1, # ...@@
     0,1,1,1,0]) # .@@@.
+# [0.0, 0.0, 0.0, 0.92, 0.0, 0.0, 0.0, 0.01, 0.0, 0.12]
+
+predict([
+    0,1,1,1,0, # .@@@
+    1,0,0,1,1, # @..@@
+    0,1,1,1,0, # .@@@
+    1,0,0,1,1, # @..@@
+    0,1,1,1,0]) # .@@@.
+# [0.0, 0.0, 0.0, 0.0, 0.0, 0.55, 0.0, 0.0, 0.93, 1.0]
+
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+weights = network[0][0]
+abs_weights = map(abs, weights)
+
+grid = [abs_weights[row:(row+5)]
+        for row in range(0,25,5)]
+
+ax = plt.gca()
+
+ax.imshow(grid,
+          cmap=mpl.cm.binary,
+          interpolation='none')
+
+def patch(x, y, hatch, color):
+    """return a matplotlib 'patch' object with the specified
+    location, crosshatch pattern and color"""
+    return mpl.patches.Rectangle((x-0.5, y-0.5), 1, 1,
+        hatch=hatch, fill=False, color=color)
+
 
