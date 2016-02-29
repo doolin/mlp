@@ -165,4 +165,12 @@ def patch(x, y, hatch, color):
     return mpl.patches.Rectangle((x-0.5, y-0.5), 1, 1,
         hatch=hatch, fill=False, color=color)
 
+for i in range(5):
+    for j in range(5):
+        if weights[5*i + j] <  0:
+            # add black and white hatches, so visible whether dark or light
+            ax.add_patch(patch(j, i, '/', "white"))
+            ax.add_patch(patch(j, i, '\\', "black"))
+
+plt.show()
 
