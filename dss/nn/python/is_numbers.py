@@ -172,5 +172,7 @@ for i in range(5):
             ax.add_patch(patch(j, i, '/', "white"))
             ax.add_patch(patch(j, i, '\\', "black"))
 
-plt.show()
+# plt.show()
 
+left_column_only = [1, 0, 0, 0, 0] * 5
+print is_neural.feed_forward(network, left_column_only)[0][0] # 10
